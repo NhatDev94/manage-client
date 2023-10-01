@@ -1,7 +1,8 @@
-import { ButtonComponent, ModalAddAndEditCategory, CategoryChart, Header } from "../components"
+import { ModalAddAndEditCategory, CategoryChart, Header } from "../components"
 import { CategoryInterface } from "../interfaces"
 import { useState } from "react"
 import { useQueryCategorys, useQuerySpends } from "../hooks"
+import Chart from "../components/Chart"
 
 const Overview = () => {
     const [openModalAddLimit, setOpenModalAddLimit] = useState(false)
@@ -18,23 +19,28 @@ const Overview = () => {
     }
 
     return (
-        <div className="">
+        <div className="w-full h-full bg-black/10">
             <Header />
-            <div className="w-full h-12 flex items-center justify-center text-sm font-semibold text-black">Overview</div>
 
-            <div className="px-4">
-                <h4 className="text-sm font-semibold text-black">Danh sach gioi han:</h4>
+            <div className="px-4 py-2 bg-white mt-1">
+                <h4 className="mb-2 text-sm font-semibold text-black">Expense</h4>
+                <Chart name='Expense' limit={8000000} used={4400000} showTitle={false} />
+            </div>
+
+            <div className="px-4 py-2 bg-white mt-1">
+                <h4 className="mb-2 text-sm font-semibold text-black">Danh sach gioi han:</h4>
                 {
                     categorys?.filter((item: CategoryInterface) => item?.amount_limit > 0)?.map((item: CategoryInterface, i: number) => {
                         return (
-                            <CategoryChart category={item} spends={spends} key={i} />
+                            <CategoryChart 
+                            key={i}
+                            category={item} 
+                            spends={spends}
+                            onOpenModalChangeLimit={handleOpenModalAddLimit} 
+                             />
                         )
                     })
                 }
-                <ButtonComponent
-                    className='mt-6'
-                    onClick={handleOpenModalAddLimit}
-                >Thêm giới hạn</ButtonComponent>
             </div>
 
             {

@@ -44,7 +44,7 @@ const Header = () => {
     }, [month, year])
 
     return (
-        <div className="w-full h-12 px-4 flex items-center justify-between text-sm font-semibold text-black">
+        <div className="w-full h-12 px-4 flex items-center justify-between text-sm font-semibold text-black bg-white">
             <img onClick={preMonth} src={left} alt="left" />
             <span>{timeStart} ~ {timeEnd}</span>
             <img onClick={nextMonth} src={right} alt="right" />
