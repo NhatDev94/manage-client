@@ -1,14 +1,14 @@
 import { Routes, Route } from 'react-router-dom'
 import pages from './pages'
 import { PageInterface } from './interfaces'
-import { Menu } from './components'
+import { SideMenu } from './components'
 
 
 function App() {
 
   return (
     <div className='w-screen h-screen'>
-      <Menu />
+      <SideMenu />
 
       <Routes>
         {

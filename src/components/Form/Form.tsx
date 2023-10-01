@@ -1,119 +1,109 @@
-import React, { ChangeEvent, useState } from "react";
-import { FormItemInterface, OptionSelectInterface } from "../../interfaces";
-import moment from "moment";
-import { InputCurrency } from "..";
-
+import React, { ChangeEvent } from "react";
+import { FormItemInterface } from "../../interfaces";
+import { Form as FormAnt } from 'antd'
+import { FormInstance } from 'antd/es'
+import { Input, InputCurrency, InputDatePicker, InputSelect } from '..'
 
 interface PropsRenderInputInterface {
     formItem: FormItemInterface,
     value: string,
-    handleChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void,
-    autoFocus: boolean
+    handleChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement> | number | string, name: string) => void,
+    autoFocus: boolean,
+    form: FormInstance
 }
 
 interface PropsInterface {
     values?: any,
     formItems: FormItemInterface[],
+    form: FormInstance,
     handleSubmit?: (values: any) => Promise<void>
 }
 
 
 const Form = (props: PropsInterface) => {
-    const { values = {}, formItems, handleSubmit } = props
+    const { values = {}, formItems, form, handleSubmit } = props
 
-    const [formValue, setFormValue] = useState(values)
-
-    const submit = (e: React.SyntheticEvent) => {
+    const submit = async (e: React.SyntheticEvent) => {
         e.preventDefault()
-        handleSubmit && handleSubmit(formValue)
+        const values = await form.validateFields()
+        handleSubmit && handleSubmit(values)
     }
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        setFormValue({
-            ...formValue,
-            [e.target.name]: e.target.value
-        })
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement> | number | string, name: string) => {
+        if (typeof e === 'string' || typeof e === 'number') {
+            form.setFieldValue(name, e)
+            return
+        }
+        form.setFieldValue(name, e.target.value)
     }
 
     return (
-        <form onSubmit={submit}>
+        <FormAnt
+            form={form}
+        >
             {
                 formItems.map((formItem: FormItemInterface, i: number) => (
-                    <div className="mb-4" key={i}>
-                        <p className="text-xs font-semibold text-black capitalize mb-2">{formItem.title}</p>
-                        <RenderInput
-                            formItem={formItem}
-                            value={values[formItem.name]}
-                            handleChange={handleChange}
-                            key={i}
-                            autoFocus={i === 0}
-                        />
-                    </div>
-
+                    <FormAnt.Item
+                        key={i}
+                        name={formItem?.name}
+                    >
+                        <div className="">
+                            <p className="text-xs font-semibold text-black capitalize mb-2">{formItem.title}</p>
+                            <RenderInput
+                                formItem={formItem}
+                                value={values[formItem.name]}
+                                handleChange={handleChange}
+                                key={i}
+                                autoFocus={i === 0}
+                                form={form}
+                            />
+                        </div>
+                    </FormAnt.Item>
                 ))
             }
             <div className="mt-6">
-                <input type="submit" className="w-full h-10 bg-green-500 rounded-lg text-white cursor-pointer" />
+                <input type="submit" onClick={submit} className="w-full h-10 bg-green-500 rounded-lg text-white cursor-pointer" />
             </div>
-        </form>
+        </FormAnt>
     )
 }
 
 export default Form
 
 const RenderInput = (props: PropsRenderInputInterface) => {
-    const { formItem, value = '', handleChange, autoFocus = false } = props
+    const { formItem, value, handleChange, form } = props
 
     switch (formItem.type) {
         case 'date':
             return (
-                <input
-                    className="w-full px-4 py-2 outline-none border border-black/20 rounded-md"
-                    type="date"
-                    defaultValue={value || moment(new Date()).format('YYYY-MM-DD')}
-                    name={formItem.name}
-                    onChange={handleChange}
+                <InputDatePicker
+                    form={form}
+                    formItem={formItem}
+                    value={value}
                 />
             )
         case 'select':
             return (
-                <select
-                    name={formItem.name}
-                    className="w-full px-4 py-2 outline-none border border-black/20 rounded-md overflow-hidden"
-                    defaultValue={value}
-                    onChange={handleChange}
-                >
-                    {
-                        formItem.options && formItem.options.map((option: OptionSelectInterface, index: number) => (
-                            <option
-                                className="w-full outline-none border-none"
-                                key={index}
-                                value={option.value}
-                            >
-                                {option.name}
-                            </option>
-                        ))
-                    }
-                </select>
+                <InputSelect
+                    form={form}
+                    formItem={formItem}
+                    value={value}
+                />
             )
         case 'currency':
             return (
                 <InputCurrency
-                    defaultValue={value}
-                    name={formItem.name}
-                    placeholder={'Enter ' + formItem.name + '...'}
-                    onChange={handleChange}
+                    form={form}
+                    formItem={formItem}
+                    value={value}
                 />
             )
         default:
             return (
-                <input
-                    className="w-full px-4 py-2 outline-none border border-black/20 rounded-md"
-                    defaultValue={value}
-                    name={formItem.name}
-                    placeholder={'Enter ' + formItem.name + '...'}
-                    onChange={handleChange}
-                    autoFocus={autoFocus}
+                <Input
+                    form={form}
+                    formItem={formItem}
+                    value={value}
                 />
             )
     }

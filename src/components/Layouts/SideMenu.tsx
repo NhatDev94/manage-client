@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom'
 
-interface MenuInterface {
+interface SideMenuInterface {
     pathname: string,
     name: string
 }
 
-const Menu = () => {
+const SideMenu = () => {
     const navigate = useNavigate()
-    const menus: MenuInterface[] = [
+    const menus: SideMenuInterface[] = [
         {
             pathname: '/',
             name: 'Home'
@@ -29,7 +29,7 @@ const Menu = () => {
     return (
         <div className="fixed bottom-0 left-0 w-screen h-14 bg-black text-white flex items-center justify-between gap-x-4">
             {
-                menus?.map((menuItem: MenuInterface, i: number) => {
+                menus?.map((menuItem: SideMenuInterface, i: number) => {
                     return (
                         <div
                             className="w-full flex items-center justify-center cursor-pointer"
@@ -45,4 +45,4 @@ const Menu = () => {
     )
 }
 
-export default Menu
+export default SideMenu

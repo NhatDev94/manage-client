@@ -1,10 +1,7 @@
 * Repositories Server: https://github.com/NhatDev94/manage-server
 
-1. UI input, select, ...
-2. Input Format Curency
-2. Filter by date
-3. Format amount ====> OKI
-4. ADD SPEND -> chua co CATEGORY -> Redirect sang trang tao Category
-5. Phai co category mac dinh -> chi cho sua ko cho xoa -> co field default
+1. ADD SPEND -> chua co CATEGORY -> Redirect sang trang tao Category
+2. Phai co category mac dinh -> chi cho sua ko cho xoa -> co field default
+3. Header la control month
 
 * IMPORTANT: to pwa

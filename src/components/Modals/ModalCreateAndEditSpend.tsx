@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react"
 import { CategoryInterface, FormItemInterface, SpendInterface } from "../../interfaces"
 import Form from "../Form/Form"
-import moment from "moment"
 import spendApi from "../../apis/spendApi"
-import { useQuery } from "react-query"
 import { ModalLayout } from ".."
+import { Form as FormAnt, Spin } from 'antd'
+import { useQueryCategorys, useQuerySpends } from "../../hooks"
 
 interface PropsInterface {
     title: string
@@ -13,25 +12,15 @@ interface PropsInterface {
     type?: string
 }
 
-const initValue = {
-    date: moment(new Date()).format('YYYY-MM-DD'),
-    category: 'ăn uống',
-    amount: 0
-}
-
 const ModalCreateAndEditSpend = (props: PropsInterface) => {
     // Phai kiem tra -> neu chua co categorys -> redirect qua trang tao category
-    const { closeModal, title, values = initValue, type = 'create' } = props
-    const [defaultValue, setDefaultValue] = useState<SpendInterface>(values)
+    const { closeModal, title, values, type = 'create' } = props
 
-    const { refetch } = useQuery({ queryKey: 'spend' })
+    const [form] = FormAnt.useForm()
 
-    const { data: category } = useQuery({
-        queryKey: 'category',
-        queryFn: spendApi.getCategorys,
-        cacheTime: 600000,
-        staleTime: 600000,
-    })
+    const { refetch } = useQuerySpends({})
+
+    const { data: categorys, isLoading: categoryLoading } = useQueryCategorys()
 
     const formItems: FormItemInterface[] = [
         {
@@ -43,7 +32,7 @@ const ModalCreateAndEditSpend = (props: PropsInterface) => {
             title: 'Category',
             name: 'category',
             type: 'select',
-            options: category?.map((item: CategoryInterface) => ({ name: item?.name, value: item?.categor_id }))
+            options: categorys?.map((item: CategoryInterface) => ({ label: item?.name, value: String(item?.category_id) }))
         },
         {
             title: 'Amount',
@@ -60,11 +49,11 @@ const ModalCreateAndEditSpend = (props: PropsInterface) => {
             type: 'select',
             options: [
                 {
-                    name: 'Expense',
+                    label: 'Expense',
                     value: 'expense'
                 },
                 {
-                    name: 'Income',
+                    label: 'Income',
                     value: 'income'
                 },
             ]
@@ -80,31 +69,33 @@ const ModalCreateAndEditSpend = (props: PropsInterface) => {
             }
             return
         }
-        const data = await spendApi.editSpend(values.date, value)
-        if (data) {
-            refetch()
-            closeModal()
+        if (values) {
+            const data = await spendApi.editSpend(values?.spend_id, value)
+            if (data) {
+                refetch()
+                closeModal()
+            }
         }
     }
 
-    useEffect(() => {
-        values && setDefaultValue({
-            ...values,
-            date: values?.date || moment(values.date).format('YYYY-MM-DD')
-        })
-    }, [])
-
     return (
-        <ModalLayout
-            title={title}
-            closeModal={closeModal}
-        >
-            <Form
-                formItems={formItems}
-                values={defaultValue}
-                handleSubmit={handleSubmit}
-            />
-        </ModalLayout>
+        <Spin spinning={categoryLoading}>
+            <ModalLayout
+                title={title}
+                closeModal={closeModal}
+            >
+                {
+                    categorys && (
+                        <Form
+                            form={form}
+                            formItems={formItems}
+                            values={(values && type === 'create') ? {} : values}
+                            handleSubmit={handleSubmit}
+                        />
+                    )
+                }
+            </ModalLayout>
+        </Spin>
     )
 }
 

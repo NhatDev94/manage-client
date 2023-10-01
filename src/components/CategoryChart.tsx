@@ -1,11 +1,13 @@
-import { CategoryInterface } from "../interfaces"
+import { CategoryInterface, SpendInterface } from "../interfaces"
+import { currency } from "../utils"
 
 interface PropsInterface {
-    category: CategoryInterface
+    category: CategoryInterface,
+    spends: SpendInterface[]
 }
 
 const CategoryChart = (props: PropsInterface) => {
-    const { category } = props
+    const { category, spends } = props
 
     const getUsedInfo = (used: number, limit: number) => {
         const usedPercen = (used * 100) / limit
@@ -15,22 +17,31 @@ const CategoryChart = (props: PropsInterface) => {
         }
     }
 
+    const getTotalAmountByCategory = () => {
+        let result: number = 0
+        // spends?.forEach((item: SpendInterface) => {
+        //     if (item.category)
+        // })
+    }
+
     return (
-        <div className="mt-4">
+        <div className="mt-5">
             <p className="mb-1 text-black font-semibold text-sm">{category?.name}</p>
-            <div className="flex items-end justify-between">
-                <div className="w-4/5 h-5 relative rounded-sm">
-                    <p className="absolute top-0 left-0 z-10 w-full h-full bg-gray-200"></p>
-                    <p
-                        className='absolute top-0 left-0 z-20 h-full rounded-sm'
+            <div className="w-full flex items-end justify-between">
+                <div className="w-2/3 h-5 relative rounded-md">
+                    <p className="absolute top-0 left-0 z-10 w-full h-full bg-gray-400"></p>
+                    <div
+                        className='absolute top-0 left-0 z-20 h-full rounded-sm flex items-center justify-center text-xs font-semibold text-white'
                         style={{
                             background: getUsedInfo(89, category?.amount_limit).background,
                             width: getUsedInfo(89, category?.amount_limit).percent + '%'
                         }}
 
-                    ></p>
+                    >
+                        {currency.formatVND(89)}
+                    </div>
                 </div>
-                <p className="text-sm font-semibold text-black">{getUsedInfo(915, category?.amount_limit).percent}%</p>
+                <p className="text-right w-1/3 text-sm font-semibold text-black">{currency.formatVND(category.amount_limit)}</p>
             </div>
         </div>
     )

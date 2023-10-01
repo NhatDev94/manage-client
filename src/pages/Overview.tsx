@@ -1,18 +1,13 @@
-import { useQuery } from "react-query"
 import { ButtonComponent, ModalAddAndEditCategory, CategoryChart } from "../components"
-import spendApi from "../apis/spendApi"
 import { CategoryInterface } from "../interfaces"
 import { useState } from "react"
+import { useQueryCategorys, useQuerySpends } from "../hooks"
 
 const Overview = () => {
     const [openModalAddLimit, setOpenModalAddLimit] = useState(false)
 
-    const { data: categorys, refetch } = useQuery({
-        queryKey: 'category',
-        queryFn: spendApi.getCategorys,
-        cacheTime: 600000,
-        staleTime: 600000,
-    })
+    const { data: spends } = useQuerySpends({})
+    const { data: categorys, refetch } = useQueryCategorys()
 
     const handleOpenModalAddLimit = () => {
         setOpenModalAddLimit(true)
@@ -21,7 +16,7 @@ const Overview = () => {
     const closeModalAddLimit = () => {
         setOpenModalAddLimit(false)
     }
-
+    
     return (
         <div className="">
             <div className="w-full h-12 flex items-center justify-center text-sm font-semibold text-black">Overview</div>
@@ -31,7 +26,7 @@ const Overview = () => {
                 {
                     categorys?.filter((item: CategoryInterface) => item?.amount_limit > 0)?.map((item: CategoryInterface, i: number) => {
                         return (
-                            <CategoryChart category={item} key={i} />
+                            <CategoryChart category={item} spends={spends} key={i} />
                         )
                     })
                 }

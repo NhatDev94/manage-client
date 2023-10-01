@@ -8,22 +8,24 @@ interface PageInterface {
 interface SpendInterface {
     date: string,
     category: string,
-    amount: number,
-    note?: string,
-    type?: string,
-    id?: number
+    amount: string,
+    note: string,
+    type: string,
+    spend_id: number
 }
 
 interface OptionSelectInterface {
-    name: string,
-    value: string | number
+    label: string,
+    value: string
 }
 
 interface FormItemInterface {
     title?: string,
     name: string,
     type?: string,
-    options?: OptionSelectInterface[]
+    options?: OptionSelectInterface[],
+    showSearch?: boolean,
+    placeholder?: string
 }
 
 interface spendOfMonthInterface {
@@ -35,9 +37,17 @@ interface ValuesInterface {
 }
 
 interface CategoryInterface {
-    categor_id: number,
+    category_id: number,
     name: string,
     amount_limit: number
+}
+
+interface FormValuesInterface {
+    date?: string,
+    category?: string,
+    amount?: number,
+    note?: string,
+    amount_limit?: number,
 }
 
 export type {
@@ -47,5 +57,6 @@ export type {
     spendOfMonthInterface,
     OptionSelectInterface,
     ValuesInterface,
-    CategoryInterface
+    CategoryInterface,
+    FormValuesInterface
 }

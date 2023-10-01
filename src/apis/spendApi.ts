@@ -17,24 +17,27 @@ const spendApi = {
         // const time = moment(new Date()).format('MM-DD-YYYY')
         const data = await axios.post(spendApi.endpoint + '/spend/create', {
             ...spend,
+            amount: +String(spend?.amount).replaceAll(',', ''),
             date: spend?.date
         })
         return data
     },
-    editSpend: async (time: string, spend: SpendInterface) => {
+    editSpend: async (spend_id: number, spend: SpendInterface) => {
         const data = await axios.put(spendApi.endpoint + '/spend/update', {
-            ...spend
+            ...spend,
+            amount: +String(spend?.amount).replaceAll(',', ''),
+            spend_id
         })
         return data
     },
 
     // CATEGORY
     getCategorys: async () => {
-        const {data} = await axios.get(spendApi.endpoint + '/category/getAll')
+        const { data } = await axios.get(spendApi.endpoint + '/category/getAll')
         return data?.data
     },
     createCategory: async (category: CategoryInterface) => {
-        const {data} = await axios.post(spendApi.endpoint + '/category/create', {
+        const { data } = await axios.post(spendApi.endpoint + '/category/create', {
             ...category
         })
         return data

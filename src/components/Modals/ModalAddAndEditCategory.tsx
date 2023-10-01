@@ -2,6 +2,7 @@ import { ModalLayout } from ".."
 import { CategoryInterface, FormItemInterface } from "../../interfaces"
 import Form from "../Form/Form"
 import spendApi from "../../apis/spendApi"
+import { Form as FormAnt} from 'antd'
 
 interface PropsInterface {
     title: string,
@@ -12,7 +13,8 @@ interface PropsInterface {
 }
 
 const ModalAddAndEditCategory = (props: PropsInterface) => {
-    const { closeModal, title, type, categorys, refetch} = props
+    const [form] = FormAnt.useForm()
+    const { closeModal, title, type, categorys, refetch } = props
 
     const handleSubmit = async (value: CategoryInterface) => {
         if (type === 'create') {
@@ -26,7 +28,7 @@ const ModalAddAndEditCategory = (props: PropsInterface) => {
 
     const optionAddLimit = () => {
         return categorys?.filter((item: CategoryInterface) => item?.amount_limit > 0)
-        .map((item: CategoryInterface) => ({name: item.name, value: item.categor_id}))
+            .map((item: CategoryInterface) => ({ label: item.name, value: String(item.category_id) }))
     }
 
     const formItemsEdit: FormItemInterface[] = [
@@ -59,8 +61,9 @@ const ModalAddAndEditCategory = (props: PropsInterface) => {
             title={title}
             closeModal={closeModal}
         >
-            <Form 
-                formItems={type === 'create' ? formItemCreate :formItemsEdit}
+            <Form
+                form={form}
+                formItems={type === 'create' ? formItemCreate : formItemsEdit}
                 handleSubmit={handleSubmit}
             />
         </ModalLayout>

@@ -1,19 +1,13 @@
 import { useState } from "react"
-import { useQuery } from "react-query"
-import spendApi from "../apis/spendApi"
 import { CategoryInterface } from "../interfaces"
 import { ButtonComponent, ModalAddAndEditCategory } from "../components"
+import { useQueryCategorys } from "../hooks"
 
 const Setting = () => {
     const [openContent, setOpenContent] = useState(false)
     const [openModalAddCategory, setOpenModalAddCategory] = useState(false)
 
-    const { data: categorys, refetch } = useQuery({
-        queryKey: 'categorys',
-        queryFn: spendApi.getCategorys,
-        cacheTime: 600000,
-        staleTime: 600000,
-    })
+    const { data: categorys, refetch } = useQueryCategorys()
 
     const toggleDrop = () => {
         setOpenContent(!openContent)
