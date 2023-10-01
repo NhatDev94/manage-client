@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { CategoryInterface } from "../interfaces"
-import { ButtonComponent, ModalAddAndEditCategory } from "../components"
+import { ButtonComponent, Header, ModalAddAndEditCategory } from "../components"
 import { useQueryCategorys } from "../hooks"
 
 const Setting = () => {

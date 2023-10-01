@@ -8,17 +8,25 @@ interface PropsInterface {
 
 const useQuerySpends = (props: PropsInterface) => {
     const now = new Date()
-    const { month = now.getMonth(), year = now.getFullYear() } = props
+    const { month, year } = props
+
+    const monthLocaStorage = localStorage.getItem('currentMonth')
+    const yearLocaStorage = localStorage.getItem('currentYear')
+
+    const currentMonth = month || monthLocaStorage && JSON.parse(monthLocaStorage) || now.getMonth()
+    const currentYear = year || yearLocaStorage && JSON.parse(yearLocaStorage) || now.getFullYear()
 
     const { data, isLoading, refetch } = useQuery({
         queryKey: 'spends',
-        queryFn: () => spendApi.getSpends(month + 1, year),
+        queryFn: () => spendApi.getSpends(currentMonth + 1, currentYear),
         cacheTime: 6000,
         staleTime: 6000,
     })
 
     return {
-        data,
+        spends: data?.data,
+        income: data?.income,
+        expense: data?.expense,
         isLoading,
         refetch
     }

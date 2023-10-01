@@ -1,4 +1,4 @@
-import { ButtonComponent, ModalAddAndEditCategory, CategoryChart } from "../components"
+import { ButtonComponent, ModalAddAndEditCategory, CategoryChart, Header } from "../components"
 import { CategoryInterface } from "../interfaces"
 import { useState } from "react"
 import { useQueryCategorys, useQuerySpends } from "../hooks"
@@ -6,7 +6,7 @@ import { useQueryCategorys, useQuerySpends } from "../hooks"
 const Overview = () => {
     const [openModalAddLimit, setOpenModalAddLimit] = useState(false)
 
-    const { data: spends } = useQuerySpends({})
+    const { spends } = useQuerySpends({})
     const { data: categorys, refetch } = useQueryCategorys()
 
     const handleOpenModalAddLimit = () => {
@@ -16,9 +16,10 @@ const Overview = () => {
     const closeModalAddLimit = () => {
         setOpenModalAddLimit(false)
     }
-    
+
     return (
         <div className="">
+            <Header />
             <div className="w-full h-12 flex items-center justify-center text-sm font-semibold text-black">Overview</div>
 
             <div className="px-4">

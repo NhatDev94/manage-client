@@ -1,32 +1,17 @@
 import CreateSpend from "../components/CreateSpend"
 import ListSpend from "../components/ListSpend"
-import TimeRangeTitle from "../components/TimeRangeTitle"
-import { useEffect, useState } from "react"
 import { useQuerySpends } from "../hooks"
+import Header from "../components/Layouts/Header"
 
 const Home = () => {
-    const now = new Date()
 
-    const [year, setYear] = useState(now.getFullYear())
-    const [month, setMonth] = useState(now.getMonth())
-
-    const { data = {}, refetch } = useQuerySpends({month, year})
-
-    const { data: spends, income, expense } = data
-
-    useEffect(() => {
-        refetch()
-    }, [month, year, refetch])
-
+    const { spends, income, expense } = useQuerySpends({})
+    console.log(spends);
+    
     return (
         <div className="w-full bg-gray-100">
-            <TimeRangeTitle
-                year={year}
-                month={month}
-                setYear={setYear}
-                setMonth={setMonth}
-            />
-            
+           <Header />
+
             {
                 spends && (
                     <ListSpend

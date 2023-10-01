@@ -1,3 +1,5 @@
+import Header from "./Layouts/Header";
+
 import ButtonComponent from "./Layouts/ButtonComponent";
 import ModalAddAndEditCategory from "./Modals/ModalAddAndEditCategory";
 import CategoryChart from "./CategoryChart";
@@ -9,6 +11,8 @@ import InputDatePicker from "./Inputs/InputDatePicker";
 import Input from "./Inputs/Input";
 
 export {
+    Header,
+    
     ButtonComponent,
     ModalAddAndEditCategory,
     CategoryChart,
