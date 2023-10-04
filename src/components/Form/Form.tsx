@@ -71,7 +71,7 @@ const Form = (props: PropsInterface) => {
 export default Form
 
 const RenderInput = (props: PropsRenderInputInterface) => {
-    const { formItem, value, handleChange, form } = props
+    const { formItem, value, form } = props
 
     switch (formItem.type) {
         case 'date':

@@ -25,7 +25,8 @@ interface FormItemInterface {
     type?: string,
     options?: OptionSelectInterface[],
     showSearch?: boolean,
-    placeholder?: string
+    placeholder?: string,
+    disabled?: boolean
 }
 
 interface spendOfMonthInterface {

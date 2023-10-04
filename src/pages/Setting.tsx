@@ -1,17 +1,16 @@
 import { useState } from "react"
 import { CategoryInterface } from "../interfaces"
-import { ButtonComponent, ModalAddAndEditCategory } from "../components"
+import { ModalAddAndEditCategory } from "../components"
 import { useQueryCategorys } from "../hooks"
 
+import plus from '../assets/svg/plus-dark.svg'
+import trash from '../assets/svg/trash.svg'
+import edit from '../assets/svg/edit.svg'
+
 const Setting = () => {
-    const [openContent, setOpenContent] = useState(false)
     const [openModalAddCategory, setOpenModalAddCategory] = useState(false)
 
     const { data: categorys, refetch } = useQueryCategorys()
-
-    const toggleDrop = () => {
-        setOpenContent(!openContent)
-    }
 
     const closeModalAddCategory = () => {
         setOpenModalAddCategory(false)
@@ -20,36 +19,35 @@ const Setting = () => {
     return (
         <div className="">
             <div
-                className="flex items-center justify-between bg-gray-100 px-4 h-10"
-                onClick={toggleDrop}
+                className="flex items-center justify-between bg-gray-100 px-4 h-12"
             >
-                <h4 className="">Category</h4>
+                <h4 className="text-sm font-semibold text-black">Expense Category</h4>
+                <img 
+                src={plus} 
+                alt='plus' 
+                className="text-black" 
+                onClick={() => setOpenModalAddCategory(true)}
+                />
             </div>
-            {
-                openContent && (
-                    <div className="px-4 bg-white">
-                        <div className="flex flex-wrap">
-                            {
-                                categorys?.map((item: CategoryInterface, i: number) => (
-                                    <div
-                                        className="w-fit p-1 mt-2 mr-2 rounded-md bg-orange-400 text-white text-sm font-semibold"
-                                        key={i}
-                                    >
-                                        {item?.name}
-                                    </div>
-                                ))
-                            }
-                        </div>
 
-                        <ButtonComponent
-                            className="w-fit px-4 mt-4"
-                            onClick={() => setOpenModalAddCategory(true)}
-                        >
-                            Add Category +
-                        </ButtonComponent>
-                    </div>
-                )
-            }
+            <div className="bg-white">
+                <div className="">
+                    {
+                        categorys?.map((item: CategoryInterface, i: number) => (
+                            <div
+                                className="w-full px-4 flex items-center justify-between py-3 border-b border-black/10"
+                                key={i}
+                            >
+                                <div className="relative z-10 text-xs font-semibold">{item?.name}</div>
+                                <div className="flex items-center gap-x-5">
+                                    <img src={edit} alt='edit' />
+                                    <img src={trash} alt='delete' />
+                                </div>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
 
             {
                 openModalAddCategory && (

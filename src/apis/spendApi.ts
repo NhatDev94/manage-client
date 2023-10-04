@@ -41,6 +41,14 @@ const spendApi = {
             ...category
         })
         return data
+    },
+    editCategory: async (category: CategoryInterface) => {
+        const {data} = await axios.put(spendApi.endpoint + '/category/update', {
+            ...category,
+            category_id: Number(category?.category_id),
+            amount_limit: Number(String(category?.amount_limit).replaceAll(',', ''))
+        })
+        return data
     }
 }
 

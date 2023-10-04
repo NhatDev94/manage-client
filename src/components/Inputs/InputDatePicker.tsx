@@ -30,6 +30,7 @@ const InputDatePicker = (props: PropsInterface) => {
         <DatePicker
             onChange={onChange}
             defaultValue={defaultDate}
+            disabled={formItem?.disabled}
             className="w-full h-10 px-4 py-2 outline-none border border-black/20 rounded-md"
         />
     )

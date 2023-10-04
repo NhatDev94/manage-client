@@ -23,9 +23,11 @@ const Input = (props: PropsInterface) => {
         <InputAnt
             defaultValue={value || ''}
             onChange={onChange}
+            disabled={formItem?.disabled}
 
             placeholder={formItem?.placeholder || 'Enter ' + formItem?.name + '...'}
             allowClear={true}
+            className='w-full h-10 outline-none border border-black/20 rounded-md'
         />
     )
 }

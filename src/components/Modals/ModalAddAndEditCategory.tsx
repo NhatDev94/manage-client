@@ -2,7 +2,7 @@ import { ModalLayout } from ".."
 import { CategoryInterface, FormItemInterface } from "../../interfaces"
 import Form from "../Form/Form"
 import spendApi from "../../apis/spendApi"
-import { Form as FormAnt} from 'antd'
+import { Form as FormAnt } from 'antd'
 
 interface PropsInterface {
     title: string,
@@ -10,15 +10,25 @@ interface PropsInterface {
     closeModal: () => void,
     categorys: CategoryInterface[],
     refetch: () => void,
+    categoryIsEdit?: CategoryInterface | null
 }
 
 const ModalAddAndEditCategory = (props: PropsInterface) => {
     const [form] = FormAnt.useForm()
-    const { closeModal, title, type, categorys, refetch } = props
+    const { closeModal, title, type, categorys, refetch, categoryIsEdit } = props
 
     const handleSubmit = async (value: CategoryInterface) => {
         if (type === 'create') {
             const data = await spendApi.createCategory(value)
+            if (data?.data) {
+                closeModal()
+                refetch()
+            }
+            return
+        }
+        if (categoryIsEdit) {
+          const data = await spendApi.editCategory({...value, name: categoryIsEdit?.name})
+            console.log(data);
             if (data?.data) {
                 closeModal()
                 refetch()
@@ -34,9 +44,10 @@ const ModalAddAndEditCategory = (props: PropsInterface) => {
     const formItemsEdit: FormItemInterface[] = [
         {
             title: 'Category',
-            name: 'category',
+            name: 'category_id',
             type: 'select',
-            options: optionAddLimit()
+            options: optionAddLimit(),
+            disabled: true
         },
         {
             title: 'Amount limit',
@@ -56,6 +67,9 @@ const ModalAddAndEditCategory = (props: PropsInterface) => {
             type: 'currency'
         }
     ]
+    const defaultValue = categoryIsEdit ? {category_id: String(categoryIsEdit?.category_id), amount_limit: categoryIsEdit?.amount_limit} : {}
+    console.log(categoryIsEdit);
+    
     return (
         <ModalLayout
             title={title}
@@ -63,6 +77,7 @@ const ModalAddAndEditCategory = (props: PropsInterface) => {
         >
             <Form
                 form={form}
+                values={defaultValue}
                 formItems={type === 'create' ? formItemCreate : formItemsEdit}
                 handleSubmit={handleSubmit}
             />

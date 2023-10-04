@@ -9,41 +9,32 @@ interface PropsInterface {
 }
 
 const Chart = (props: PropsInterface) => {
-    const { name, used, limit, showTitle = false, onOpenModalChangeLimit } = props
+    const { name, used, limit, showTitle = true, onOpenModalChangeLimit } = props
 
     const percent = (used / limit) * 100 < 100 ? Math.round((used / limit) * 100) : 100
     return (
-        <div className="mb-5">
-            <div className="flex items-center justify-between mb-1">
-                {
-                    showTitle ? <p className="text-black font-semibold text-sm">{name}</p> : <p></p>
-                }
-                <p 
-                className="text-right text-sm font-semibold text-black"
-                onClick={onOpenModalChangeLimit && onOpenModalChangeLimit}
-                >{currency.formatVND(limit)} ({percent})%</p>
+        <div className="flex items-end justify-between gap-x-10 py-3 px-4" style={{ borderBottom: showTitle ? '1px solid silver' : '' }}>
+            <div className="w-1/3">
+                <p className="text-gray-400 font-bold text-sm capitalize">{name}</p>
+                <p
+                    className="text-black text-md font-semibold"
+                    onClick={onOpenModalChangeLimit}
+                >{currency.formatVND(limit)}</p>
             </div>
-            <div className="w-full flex items-end justify-between">
-                <div className="w-full h-5 relative rounded-r-sm overflow-hidden">
-                    <p className="absolute top-0 left-0 z-10 w-full h-full bg-neutral-600"></p>
-                    <div
-                        className='absolute top-0 left-0 z-20 h-full rounded-r-sm overflow-hidden flex items-center justify-center'
-                        style={{
-                            background: 'green',
-                            width: (percent) + '%'
-                        }}
 
-                    >
-                    </div>
-                    <span
-                        className="h-full absolute top-0 z-30 text-xs font-semibold text-white flex items-center justify-center"
-                        style={{
-                            left: percent < 20 ? percent + '%' : (percent / 2) + '%',
-                            transform: `translate(${percent >= 20 ? '-50%' : 0})`
-                        }}
-                    >{currency.formatVND(used)}</span>
+            <div className="w-2/3">
+                <div className="relative w-full h-4 rounded-sm mb-1 overflow-hidden">
+                    <p className="w-full h-full bg-black/20 "></p>
+                    <p
+                        className="absolute top-0 left-0 h-full bg-blue-400"
+                        style={{ width: percent + '%' }}
+                    ></p>
+                    <p className="absolute top-0 right-0 z-50 h-full flex items-center text-xs font-semibold text-black">{percent}%</p>
                 </div>
-
+                <div className="w-full flex items-center justify-between">
+                    <p className="text-blue-500 text-sm font-semibold">{currency.formatVND(used)}</p>
+                    <p className="text-black text-sm font-semibold">{currency.formatVND(limit - used)}</p>
+                </div>
             </div>
         </div>
     )

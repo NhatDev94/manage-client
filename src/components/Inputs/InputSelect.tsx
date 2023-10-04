@@ -31,6 +31,7 @@ const InputSelect = (props: PropsInterface) => {
             showSearch={formItem?.showSearch}
             placeholder={formItem?.placeholder || 'Enter ' + formItem?.name + '...'}
             onChange={onChange}
+            disabled={formItem?.disabled}
         />
     )
 }

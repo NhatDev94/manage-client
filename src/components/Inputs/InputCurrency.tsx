@@ -25,7 +25,8 @@ const InputCurrency = (props: PropsInterface) => {
             value={Number(value) || ''}
             placeholder={formItem?.placeholder}
             onChange={onChange}
-
+            disabled={formItem?.disabled}
+            
             allowLeadingZeros={false}
             thousandSeparator=','
             decimalSeparator='.'
